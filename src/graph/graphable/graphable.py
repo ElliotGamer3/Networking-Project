@@ -1,6 +1,6 @@
 #abstract class for all graphable objects
 from uuid import uuid4
-from utilities.guid import GUID
+from src.utilities.guid import GUID
 class Graphable:
 
     def __init__(self, type:str=None, guid:str=None, name:str=None) -> None:

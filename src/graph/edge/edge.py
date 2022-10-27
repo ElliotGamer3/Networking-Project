@@ -1,5 +1,5 @@
-from graph.graphable.graphable import Graphable
-from graph.node.node import Node
+from src.graph.graphable.graphable import Graphable
+from src.graph.node.node import Node
 
 #class to represent an edge in a graph
 class Edge(Graphable):

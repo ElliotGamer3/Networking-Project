@@ -1,5 +1,5 @@
 #class for a node in the graph
-from graph.graphable.graphable import Graphable
+from src.graph.graphable.graphable import Graphable
 class Node(Graphable):
     def __init__(self, name : str=None) -> None:
         super().__init__(name=name) #call the super constructor with the name as the type is set in the by the first get of the type property

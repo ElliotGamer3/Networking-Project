@@ -1,6 +1,5 @@
-from this import d
-from edge import Edge as Edge
-from graph.node.node import Node
+from src.graph.edge.edge import Edge as Edge
+from src.graph.node.node import Node
 #class for directed edge in a graph
 class DirectedEdge(Edge):
     def __init__(self, node1 : Node, node2: Node, direction : int=None, name : str=None) -> None:

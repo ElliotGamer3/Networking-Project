@@ -1,6 +1,6 @@
-from graph.graphable.graphable import Graphable
-from graph.node.node import Node
-from graph.edge.edge import Edge
+from src.graph.graphable.graphable import Graphable
+from src.graph.node.node import Node
+from src.graph.edge.edge import Edge
 
 class Graph:
     # connections is a dict of named edges and directed edges

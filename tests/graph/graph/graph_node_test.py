@@ -1,8 +1,8 @@
 #unit tests for the node functions in the Graph class
 
 import unittest
-from graph.graph import Graph
-from graph.node.node import Node
+from src.graph.graph import Graph
+from src.graph.node.node import Node
 
 class TestNodeFunctionsBase(unittest.TestCase):
     def setUp(self) -> None:

@@ -1,6 +1,6 @@
-import graph.graph as Graph
-import graph.edge.edge as Edge
-import graph.node.node as Node
+import src.graph.graph as Graph
+import src.graph.edge.edge as Edge
+import src.graph.node.node as Node
 def main():
 
     #create some nodes
