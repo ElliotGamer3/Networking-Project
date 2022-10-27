@@ -1,4 +1,5 @@
 #abstract class for all graphable objects
+from uuid import uuid4
 from utilities.guid import GUID
 class Graphable:
 
@@ -21,7 +22,7 @@ class Graphable:
     @property
     def guid(self) -> str:
         if self._guid is None: #if the guid is not set, set it to a new guid
-            self._guid = GUID.guid #get a new guid
+            self._guid = uuid4().__str__()
         return self._guid #return the guid
     
     @property
@@ -31,4 +32,7 @@ class Graphable:
         return self._type #return the type
 
     def __str__(self) -> str:
-        return f"{self.type}: {self.name} - ({self.guid})"
+        return f"[{self.type}: {self.name} - ({self.guid})]"
+
+    def __repr__(self) -> str:
+        return self.__str__()

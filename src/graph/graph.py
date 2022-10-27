@@ -31,16 +31,32 @@ class Graph:
 
     def getJSON(self) -> dict:
         graph = {}
-        for graphable_element in self.graph.values():
-            graph[graphable_element.guid] = graphable_element.getJSON()
+        for graphable_element_guid, graphable_element in self.graph.items():
+            graph[graphable_element_guid] = graphable_element.getJSON()
         return graph
 
     def __str__(self) -> str:
         rstr = ""
         for id, element in self.getGraph().items():
-            rstr += "id: " + str(id) + " element: " + str(element) + "\n"
+            rstr += f"id: {id}\nelement: {element}\n"
         return rstr
-        pass
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+    #returns a list of elements in the graph
+    def getElementsString(self) -> str:
+        rstr = ""
+        for element in self.graph.values():
+            rstr += f"{element}\n"
+        return rstr
+
+    #returns a list of the elements ids in the graph
+    def getIdsString(self) -> str:
+        rstr = ""
+        for id in self.graph.keys():
+            rstr += f"{id}\n"
+        return rstr
 
 ############################################################################################################
 # Node methods (These refer to nodes with no connections)                                                  #   

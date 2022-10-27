@@ -6,7 +6,7 @@ class Node(Graphable):
         pass
 
     # override the getJSON method in the child class
-    def getJson(self) -> dict:
+    def getJSON(self) -> dict:
         return {
             "guid": self.guid,
             "type": self.type,
@@ -15,3 +15,6 @@ class Node(Graphable):
 
     def __str__(self) -> str:
         return super().__str__()
+
+    def __repr__(self) -> str:
+        return super().__repr__()

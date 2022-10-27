@@ -34,3 +34,7 @@ class Edge(Graphable):
             return (self.node1 == __o.node1 and self.node2 == __o.node2) or (self.node1 == __o.node2 and self.node2 == __o.node1)
         else: #otherwise just check the if the nodes are the same and the direction is the same
             return self.node1 == __o.node1 and self.node2 == __o.node2 and self._direction == __o.direction
+
+    #the string that is used when the object is printed
+    def __repr__(self) -> str:
+        return self.__str__()
