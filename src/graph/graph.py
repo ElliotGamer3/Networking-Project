@@ -5,10 +5,12 @@ from src.graph.edge.edge import Edge
 class Graph:
     # connections is a dict of named edges and directed edges
     # {edge_name1: Edge, edge_name2: DirectedEdge}
-    def __init__(self, graphable_elements : list[Graphable] ) -> None:
+    def __init__(self, graphable_elements : list[Graphable] = None) -> None:
         #initialize the graph with the connections
         # graph is a dict of edges and nodes { id: ("edge", Edge), id: ("node", Node), id: ("directed_edge", DirectedEdge)}
         self.graph = {}
+        if graphable_elements is None:
+            graphable_elements = []
         for element in graphable_elements:
             self.addElement(element) #add the element to the graph
         

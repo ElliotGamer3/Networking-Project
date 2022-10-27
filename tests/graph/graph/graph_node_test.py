@@ -6,8 +6,8 @@ from src.graph.node.node import Node
 
 class TestNodeFunctionsBase(unittest.TestCase):
     def setUp(self) -> None:
+        self.node = Node("testNode")
         self.graph = Graph()
-        self.node = Node()
         return super().setUp()
 
     def tearDown(self) -> None:
@@ -18,13 +18,13 @@ class TestNodeFunctionsBase(unittest.TestCase):
 class TestAddNode(TestNodeFunctionsBase):
     def runTest(self):
         self.graph.addNode(self.node)
-        self.assertEqual(self.graph.nodes[0], self.node)
+        #check that the node was added to the graph
+        self.assertIn(self.node, self.graph.graph.values())
 
 class TestRemoveNode(TestNodeFunctionsBase):
     def runTest(self):
         self.graph.addNode(self.node)
         self.assertEqual(self.graph.removeNode(self.node), self.node)
-        self.assertEqual(self.graph.nodes, [])
 
 class TestGetNodes(TestNodeFunctionsBase):
     def runTest(self):
@@ -35,7 +35,6 @@ class TestGetNode(TestNodeFunctionsBase):
     def runTest(self):
         self.graph.addNode(self.node)
         self.assertEqual(self.graph.getNode(self.node.name), self.node)
-        self.assertEqual(self.graph.getNode(self.node.guid), self.node)
 
 class TestGetNodeByGUID(TestNodeFunctionsBase):
     def runTest(self):
