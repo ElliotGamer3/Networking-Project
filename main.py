@@ -1,6 +1,7 @@
 import src.graph.graph as Graph
 import src.graph.edge.edge as Edge
 import src.graph.node.node as Node
+from src.simulation.scenarios.simple_network import EveryNodeTravelerScenario
 def main():
 
     #create some nodes
@@ -24,7 +25,13 @@ def main():
     print(graph1)
     print(graph2)
     print(graph3)
-    print("finished")
+    print("finished basic graph tests")
+    print("")
+
+    #create a scenario
+    scenario = EveryNodeTravelerScenario(10)
+    scenario.run()
+
     return 0
 
 if __name__ == "__main__":

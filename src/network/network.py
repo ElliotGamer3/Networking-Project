@@ -176,7 +176,7 @@ class Network(Graph):
 
     #get the system cost for the given node
     def getNodeSystemCost(self, node: Node) -> float:
-        return self.getNodeCost(node) + sum([self.getEdgeCost(edge) for edge in self.getEdgesByNode(node)])
+        return self.getNodeCost(node) + sum([self.getEdgeCost(edge) for edge in self.getEdgesFromNode(node)])
     
     #get the system cost for the all nodes
     def getSystemCost(self) -> dict[str, float]:

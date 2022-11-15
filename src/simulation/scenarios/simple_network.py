@@ -74,6 +74,23 @@ class EveryNodeTravel(TravelClass):
         self.last_travel_paths = traveler_paths
         self.log()
 
+
+
+class EveryNodeTravelerScenario:
+    def __init__(self, iterations = None) -> None:
+        if iterations is None:
+            iterations = 10
+        self.iterations = iterations
+
+    def run(self) -> None:
+        # create an instance of the travel class
+        travel = EveryNodeTravel()
+        # perform 10 ticks of the simulation
+        for i in range(self.iterations):
+            travel.tick()
+        # print out the logs
+        travel.printLogs()
+
 if __name__ == "__main__":
     # create an instance of the travel class
     travel = EveryNodeTravel()
