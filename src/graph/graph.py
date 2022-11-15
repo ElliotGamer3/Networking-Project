@@ -103,6 +103,12 @@ class Graph:
                 nodes.append(element)  # add the node to the list
         return nodes  # return the list of nodes
 
+    #returns the neighbors of a node that can be reached from an edge
+    def getNeighbors(self, node: Node) -> list[Node]:
+        neighbors = []
+        for edge in self.getEdgesFromNode(node):
+            neighbors.append(edge.getOtherNode(node))
+        return neighbors
 
 ############################################################################################################
 # Edge methods                                                                                             #

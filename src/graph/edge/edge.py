@@ -19,6 +19,16 @@ class Edge(Graphable):
             self._direction = 0
         return self._direction
 
+    #returns the node that is not the given node
+    def getOtherNode(self, node: Node) -> Node:
+        if node == self.node1:
+            return self.node2
+        elif node == self.node2:
+            return self.node1
+        else:
+            raise ValueError(f"Node {node} is not connected to edge {self}")
+            
+
     # return a string representation of the edge
     def __str__(self) -> str:
         if self._direction == 0:

@@ -8,16 +8,16 @@ from src.graph.graph import Graph
 # the traveler will travel from one node to another on a network using a method of travel
 # it can provide its travel path
 
-
 class Traveler:
-    def __init__(self, network: Network, travel_method, name: str = None, start_location: str = None, end_destination: str = None) -> None:
+    def __init__(self, network: Network, name: str = None, start_location: Node = None, end_location: Node = None) -> None:
         self._name = name
         self._guid = str(uuid4())  # Generate a random guid
         self._start_location = start_location
-        self._end_destination = end_destination
+        self._end_location = end_location
         self._network = network
-        self._travel_method = travel_method
-        self.travel_path = []
+        self.travel_path = [start_location]
+        self.traveled = False #flag to indicate if the traveler has finished traveling
+        
 
     @property
     def name(self) -> str:
@@ -30,16 +30,16 @@ class Traveler:
         return self._guid
 
     @property
-    def start_location(self) -> str:
+    def start_location(self) -> Node:
         if self._start_location == None:
             self._start_location = self._network.nodes[0]
         return self._start_location
 
     @property
-    def end_destination(self) -> str:
-        if self._end_destination == None:
-            self._end_destination = self._network.nodes[-1]
-        return self._end_destination
+    def end_location(self) -> Node:
+        if self._end_location == None:
+            self._end_location = self._network.nodes[-1]
+        return self._end_location
 
     @property
     def network(self) -> Network:
@@ -53,10 +53,29 @@ class Traveler:
             raise Exception("No travel method has been set for the traveler")
         return self._travel_method
 
-    # returns the current travel path of the traveler
+    # returns the current travel path of the traveler as a list of list of nodes
     def getTravelPath(self) -> list[Node]:
         return self.travel_path
 
-    # performs a tick of the simulation for the traveler using the given method of travel
-    def travel(self) -> None:
-        return self.travel_method(self.network, self.start_location, self.end_destination)
+    # travels to the given node returns true if the traveler has reached the end destination
+    def travelTo(self, node: Node) -> list[Node]:
+        #check if the node is in the network
+        if node not in self.network.getNodes():
+            raise Exception("The node is not in the network")
+        #get the nodes that the traveler can travel to from the current location
+        neighbors = []
+        for edge in self.network.getEdgesFromNode(self.start_location):
+            if edge.node1 == self.start_location:
+                neighbors.append(edge.node2)
+            elif edge.node2 == self.start_location:
+                neighbors.append(edge.node1)
+        if node in neighbors:
+            self.travel_path.append(node) #add the node to the travel path
+            self._start_location = node #set the start location to the node
+            #check if the traveler has reached the end destination or if there are no more edges to travel to
+            if node == self.end_location or self.network.getEdgesFromNode(node) == []:
+                self.traveled = True
+        else:
+            raise Exception("The traveler cannot travel to the given node")
+        return self.travel_path
+
