@@ -1,16 +1,20 @@
-#class for a node in the graph
 from src.graph.graphable.graphable import Graphable
-class Node(Graphable):
-    def __init__(self, name : str=None) -> None:
-        super().__init__(name=name) #call the super constructor with the name as the type is set in the by the first get of the type property
-        pass
+# class for a node in the graph
 
+
+class Node(Graphable):
+    def __init__(self, name: str = None, cost: float = None) -> None:
+        # call the super constructor with the name and cost type is set by the property in the super class
+        super().__init__(name=name, cost=cost)
+        pass
     # override the getJSON method in the child class
+
     def getJSON(self) -> dict:
         return {
             "guid": self.guid,
             "type": self.type,
-            "name": self.name
+            "name": self.name,
+            "cost": self.cost
         }
 
     def __str__(self) -> str:
