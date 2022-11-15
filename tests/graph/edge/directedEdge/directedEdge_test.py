@@ -1,7 +1,7 @@
 #unit tests for directedEdge.py
 import unittest
-from directedEdge import DirectedEdge
-from node import Node
+from src.graph.edge.directedEdge import DirectedEdge
+from src.graph.node.node import Node
 class TestDirectedEdgeFunctionsBase(unittest.TestCase):
     def setUp(self) -> None:
         self.node1 = Node("node1")
