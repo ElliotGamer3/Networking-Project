@@ -114,7 +114,7 @@ class Graph:
     def addEdge(self, edge: Edge) -> None:
         # add an edge to the graph
         # if the edge is already in the graph
-        if edge in self.graph.values()[1]:
+        if edge in self.getEdges():
             # raise an error
             raise ValueError("Edge {edge} already exists in graph")
         self.graph[edge.guid] = ("edge", edge)  # add the edge to the graph
@@ -153,15 +153,12 @@ class Graph:
 
     # returns the edge based on the nodes it connects and the direction
     def getEdgeByNodes(self, node1: Node, node2: Node) -> Edge:
-        # for each direction try to find the edge the connects the nodes
-        for direction in range(-1, 1, 1):
-            try:
-                tempEdge = self.getEdgeByEdge(
-                    Edge("temp", node1, node2, direction))
-            except ValueError:
-                continue  # if the edge is not found, continue to the next direction
-            finally:
-                return tempEdge  # if the edge is found, return it
+        #check if an edge exists between the two nodes
+        for t, edge in self.graph.values():
+            if edge.node1 == node1 and edge.node2 == node2:
+                return edge
+            if edge.node1 == node2 and edge.node2 == node1:
+                return edge
         # if the edge is not found, raise an error
         raise ValueError(
             "Edge connecting {node1} and {node2} does not exist in graph")
@@ -177,7 +174,7 @@ class Graph:
     # returns a list of edges that connect to the given node going out of the node
     def getEdgesFromNode(self, node: Node) -> list[Edge]:
         edges = []  # create a list of edges
-        for edge in self.graph.values():  # for each edge in the graph
+        for edge in self.getEdges():  # for each edge in the graph
             # if the edge connects to the node and is not a directed edge going into the node
             if (edge.node1 == node and not edge.direction == -1) or (edge.node2 == node and not edge.direction == 1):
                 edges.append(edge)  # add the edge to the list

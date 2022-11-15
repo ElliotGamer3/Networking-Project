@@ -10,7 +10,7 @@ from src.graph.graph import Graph
 
 
 class Traveler:
-    def __init__(self, network: Network, travel_method: function, name: str = None, start_location: str = None, end_destination: str = None) -> None:
+    def __init__(self, network: Network, travel_method, name: str = None, start_location: str = None, end_destination: str = None) -> None:
         self._name = name
         self._guid = str(uuid4())  # Generate a random guid
         self._start_location = start_location
@@ -48,7 +48,7 @@ class Traveler:
         return self._network
 
     @property
-    def travel_method(self) -> function:
+    def travel_method(self):
         if self._travel_method == None:
             raise Exception("No travel method has been set for the traveler")
         return self._travel_method

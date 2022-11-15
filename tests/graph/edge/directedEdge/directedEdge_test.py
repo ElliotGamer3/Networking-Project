@@ -14,4 +14,19 @@ class TestDirectedEdgeFunctionsBase(unittest.TestCase):
         self.node1 = None
         return super().tearDown()
 
+#Test that the node1 and node2 are set correctly
+class TestDirectedEdgeNode1(TestDirectedEdgeFunctionsBase):
+    def runTest(self):
+        self.assertEqual(self.edge.node1, self.node1)
+
+class TestDirectedEdgeNode2(TestDirectedEdgeFunctionsBase):
+    def runTest(self):
+        self.assertEqual(self.edge.node2, self.node2)
+
+#Test that the direction is set correctly
+class TestDirectedEdgeDirection(TestDirectedEdgeFunctionsBase):
+    def runTest(self):
+        self.assertEqual(self.edge.direction, 1)
+
+
 
