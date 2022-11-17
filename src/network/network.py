@@ -133,7 +133,8 @@ class Network(Graph):
     def updateCost(self, guid: str, cost: float) -> None:
         if guid not in self.getGraph().keys():
             raise ValueError("Element {guid} does not exist in graph")
-        element = self.getGraph().values()
+        # set element to the element with the given guid
+        t, element = self.getGraph()[guid]
         if isinstance(element, Node):
             self.setNodeCostByGUID(element.guid, cost)
         elif isinstance(element, Edge):
@@ -141,6 +142,13 @@ class Network(Graph):
         else:
             raise ValueError(
                 "Element type {elementType} does not have a cost associated with it")
+
+    # updates the network to the given set of costs for the network elements
+    def updateCosts(self, new_costs: dict[str, float] = None) -> None:
+        if new_costs == None:  # if no new costs are given
+            return  # do nothing
+        for guid in new_costs:
+            self.updateCost(guid, new_costs[guid])
 
 ############################################################################################################
 
@@ -157,29 +165,35 @@ class Network(Graph):
             for node in path[1:]:  # for all nodes except the first one
                 prev_node = path[path.index(node) - 1]  # get the previous node
                 # add the cost of the previous node to the calculated costs
+                if prev_node.guid not in interaction_costs.keys():
+                    interaction_costs[prev_node.guid] = 0.0
+                interaction_costs[node.guid] = interaction_costs[prev_node.guid]
                 interaction_costs[node.guid] += self.getNodeCost(node)
                 # get the edge between the previous and the current node
                 edge = self.getEdgeByNodes(prev_node, node)
+                if edge.guid not in interaction_costs.keys():
+                    interaction_costs[edge.guid] = 0.0
                 interaction_costs[edge.guid] += self.getEdgeCost(edge)
         return interaction_costs
-
-    # updates the network to the given set of costs for the network elements
-    def updateCosts(self, new_costs: dict[str, float] = None) -> None:
-        if new_costs == None:  # if no new costs are given
-            return  # do nothing
-        for guid in new_costs:
-            self.updateCost(guid, new_costs[guid])
 
     # get the complete system cost which is the average of the node and edge costs
     def getCompleteSystemCost(self) -> float:
         return (sum(self.node_costs.values()) + sum(self.edge_costs.values())) / (len(self.node_costs) + len(self.edge_costs))
 
-    #get the system cost for the given node
+    # get the system cost for the given node
     def getNodeSystemCost(self, node: Node) -> float:
-        return self.getNodeCost(node) + sum([self.getEdgeCost(edge) for edge in self.getEdgesFromNode(node)])
-    
-    #get the system cost for the all nodes
+        nodeSystemCost = 0.0
+        # add the cost of the node itself the edges connected to the node and the nodes connected to the node and return the average
+        counter = 1
+        nodeSystemCost += self.getNodeCost(node)
+        for edge in self.getEdgesFromNode(node):
+            counter += 2
+            nodeSystemCost += self.getEdgeCost(edge)
+            nodeSystemCost += self.getNodeCost(edge.getOtherNode(node))
+        # return the average of the costs
+        return nodeSystemCost / counter
+
+    # get the system cost for the all nodes
+
     def getSystemCost(self) -> dict[str, float]:
-        return {node.guid: self.getNodeSystemCost(node) for node in self.getNodes()}
-
-
+        return {node.name: self.getNodeSystemCost(node) for node in self.getNodes()}

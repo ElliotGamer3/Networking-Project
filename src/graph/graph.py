@@ -103,7 +103,7 @@ class Graph:
                 nodes.append(element)  # add the node to the list
         return nodes  # return the list of nodes
 
-    #returns the neighbors of a node that can be reached from an edge
+    # returns the neighbors of a node that can be reached from an edge
     def getNeighbors(self, node: Node) -> list[Node]:
         neighbors = []
         for edge in self.getEdgesFromNode(node):
@@ -115,7 +115,6 @@ class Graph:
 ############################################################################################################
 
     # add an edge to the graph
-
 
     def addEdge(self, edge: Edge) -> None:
         # add an edge to the graph
@@ -143,7 +142,7 @@ class Graph:
 
     # returns the edge with the given GUID
     def getEdgeByGUID(self, guid: str) -> Edge:
-        for t, edge in self.graph.values():
+        for edge in self.getEdges():
             if edge.guid == guid:
                 return edge
         # if the edge is not found, raise an error
@@ -151,7 +150,7 @@ class Graph:
 
     # returns the edge based on another edge
     def getEdgeByEdge(self, edge: Edge) -> Edge:
-        for t, current_edge in self.graph.values():
+        for current_edge in self.getEdges():
             if current_edge == edge:
                 return current_edge
         # if the edge is not found, raise an error
@@ -159,8 +158,8 @@ class Graph:
 
     # returns the edge based on the nodes it connects and the direction
     def getEdgeByNodes(self, node1: Node, node2: Node) -> Edge:
-        #check if an edge exists between the two nodes
-        for t, edge in self.graph.values():
+        # check if an edge exists between the two nodes
+        for edge in self.getEdges():
             if edge.node1 == node1 and edge.node2 == node2:
                 return edge
             if edge.node1 == node2 and edge.node2 == node1:

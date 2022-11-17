@@ -9,93 +9,137 @@ from src.simulation.traveler import Traveler
 # the goal of the network is to travel from node1 to node3
 
 
-class SimpleNetwork:
+class GenericNetwork:
+    def __init__(self, network) -> None:
+        self.network = network
+
+
+class SimpleNetwork(GenericNetwork):
     def __init__(self) -> None:
         # create the nodes
-        self.node1 = Node("node1")
-        self.node2 = Node("node2")
-        self.node3 = Node("node3")
+        self.node1 = Node("node1", 0.0)
+        self.node2 = Node("node2", 0.0)
+        self.node3 = Node("node3", 0.0)
         # create the edge between the nodes with a cost of 1
-        self.edge = Edge(self.node1, self.node2, 1, "edge1", 1.0)
-        self.edge = Edge(self.node2, self.node3, 1, "edge2", 1.0)
+        self.edge1 = Edge(self.node1, self.node2, 1, "edge1", 1.0)
+        self.edge2 = Edge(self.node2, self.node3, 1, "edge2", 2.0)
         # save the network name
         self.name = "simple_network"
         # create the network with the nodes and edges
-        self.network = Network([self.node1, self.node2, self.edge])
+        self.network = Network(
+            [self.node1, self.node2, self.node3, self.edge1, self.edge2])
+
 
 class TravelClass(SimpleNetwork):
-    def __init__(self) -> None:
+    def __init__(self, start_location=None, end_location=None) -> None:
+        # if the network is not given, create a new one
         super().__init__()
-        self.travelers = [Traveler(
-            self.network, "traveler1", self.node1, self.node3)]
+
+        self.start_location = start_location
+        self.end_location = end_location
+        if start_location is None:
+            self.start_location = self.network.getNodes()[0]
+        if end_location is None:
+            self.end_location = self.network.getNodes()[-1]
+        self.travelers = []
         self.last_travel_paths = []
         self.interaction_cost_log = []
         self.complete_system_cost_log = []
         self.system_cost_log = []
         self.travel_path_log = []
         self.total_ticks = 0
-
-    # function for performing a tick of the simulation (override this in the travel class)
-    def tick(self) -> None:
-        self.total_ticks += 1
+        self.traveled = False
 
     def log(self) -> None:
-        self.interaction_cost_log.append(self.network.getInteractionCosts(self.last_travel_paths))
+        self.interaction_cost_log.append(
+            self.network.getInteractionCosts(self.last_travel_paths))
         # log the complete system cost
-        self.complete_system_cost_log.append(self.network.getCompleteSystemCost())
+        self.complete_system_cost_log.append(
+            self.network.getCompleteSystemCost())
         # log the system cost
         self.system_cost_log.append(self.network.getSystemCost())
         # log the travel path
         self.travel_path_log.append(self.last_travel_paths)
 
     def printLogs(self) -> None:
-        #print out all the logs for the travelers
+        # print out all the logs for the travelers
         for tick in range(self.total_ticks):
             print("Tick: " + str(tick))
             print("Interaction Cost: " + str(self.interaction_cost_log[tick]))
-            print("Complete System Cost: " + str(self.complete_system_cost_log[tick]))
+            print("Complete System Cost: " +
+                  str(self.complete_system_cost_log[tick]))
             print("System Cost: " + str(self.system_cost_log[tick]))
             print("Travel Path: " + str(self.travel_path_log[tick]))
             print("")
 
-#travel class that travels to all nodes in the network
+    def getLogs(self) -> dict[str, list]:
+        return {
+            "interaction_cost_log": self.interaction_cost_log,
+            "complete_system_cost_log": self.complete_system_cost_log,
+            "system_cost_log": self.system_cost_log,
+            "travel_path_log": self.travel_path_log
+        }
+
+
+# travel class that travels to all nodes in the network
 class EveryNodeTravel(TravelClass):
-    # function for performing a tick of the simulation
-    def tick(self) -> None:
-        super().tick() # call the super class tick function
-        #below is the travel method specific to this class
+
+    def __init__(self, start_location=None, end_location=None) -> None:
+        super().__init__(start_location, end_location)
+
+    def tick(self) -> list[list[Graphable]]:
+        self.total_ticks += 1
+        # below is the travel method specific to this class
         # create a list of traveler's travel paths
+        if self.start_location is not None and self.end_location is not None:
+            if self.start_location == self.end_location:
+                self.traveled = True
+                return []
+            if self.traveled:
+                return []
+
         traveler_paths = []
+        new_travelers = [EveryNodeTravel(self.node1, self.node2)]
         # perform a tick for each traveler and save their travel path
         for traveler in self.travelers:
+            self.travelers.remove(traveler)
+            if traveler.traveled:
+                continue
             for neighbor in self.network.getNeighbors(traveler.start_location):
-                subTraveler = Traveler(self.network, start_location=neighbor, end_location=traveler.end_location)
-                traveler_paths.append(subTraveler.travelTo(neighbor))
+                subTraveler = EveryNodeTravel(
+                    neighbor, traveler.end_location)
+                new_travelers.append(subTraveler)
+            for subTraveler in new_travelers:
+                for subPath in subTraveler.tick():
+                    traveler_paths.append(subPath)
+                    print("Traveler: " + traveler.name +
+                          " traveled to: " + neighbor.name)
+                    print("Traveler: path: " + str(traveler_paths[-1]))
+        self.travelers = new_travelers
         self.last_travel_paths = traveler_paths
         self.log()
-
+        return traveler_paths
 
 
 class EveryNodeTravelerScenario:
-    def __init__(self, iterations = None) -> None:
+    def __init__(self, iterations=None) -> None:
         if iterations is None:
-            iterations = 10
+            iterations = 3
         self.iterations = iterations
+        self.travel = EveryNodeTravel()
 
     def run(self) -> None:
         # create an instance of the travel class
-        travel = EveryNodeTravel()
         # perform 10 ticks of the simulation
         for i in range(self.iterations):
-            travel.tick()
-        # print out the logs
-        travel.printLogs()
+            self.travel.tick()
 
-if __name__ == "__main__":
-    # create an instance of the travel class
-    travel = EveryNodeTravel()
-    # perform 10 ticks of the simulation
-    for i in range(10):
-        travel.tick()
-    # print out the logs
-    travel.printLogs()
+        # print out the logs
+        self.travel.printLogs()
+
+    def getLogs(self) -> dict[str, list]:
+        return self.travel.getLogs()
+
+    def printLogs(self) -> None:
+        for log in self.travel.getLogs():
+            print(log)

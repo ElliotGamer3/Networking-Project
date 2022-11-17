@@ -1,4 +1,4 @@
-#unittests for the traveler class
+# unittests for the traveler class
 import unittest
 from src.simulation.traveler import Traveler
 from src.network.network import Network
@@ -6,6 +6,7 @@ from src.graph.node.node import Node
 from src.graph.edge.edge import Edge
 from src.graph.graphable.graphable import Graphable
 from src.graph.graph import Graph
+
 
 class TestTravelerFunctionsBase(unittest.TestCase):
     def setUp(self) -> None:
@@ -20,8 +21,9 @@ class TestTravelerFunctionsBase(unittest.TestCase):
         self.graph2 = Graph(self.nodes)
         self.graph3 = Graph([])
         self.network = Network(self.edges+self.nodes)
-        
-        self.traveler = Traveler(self.network, "traveler", self.node1, self.node3)
+
+        self.traveler = Traveler(
+            self.network, "traveler", self.node1, self.node3)
         return super().setUp()
 
     def tearDown(self) -> None:
@@ -39,20 +41,28 @@ class TestTravelerFunctionsBase(unittest.TestCase):
         self.node1 = None
         return super().tearDown()
 
-#test the travelTo method
+# test the travelTo method
+
+
 class TestTravelerTravelTo(TestTravelerFunctionsBase):
     def runTest(self):
+        self.assertEqual(self.traveler.travel_path, [self.node1])
         self.traveler.travelTo(self.node2)
         self.assertEqual(self.traveler.travel_path, [self.node1, self.node2])
         self.traveler.travelTo(self.node3)
-        self.assertEqual(self.traveler.travel_path, [self.node1, self.node2, self.node3])
+        self.assertEqual(self.traveler.travel_path, [
+                         self.node1, self.node2, self.node3])
         self.assertTrue(self.traveler.traveled)
 
-#test the getTravelPath method
+# test the getTravelPath method
+
+
 class TestTravelerGetTravelPath(TestTravelerFunctionsBase):
     def runTest(self):
         self.assertEqual(self.traveler.getTravelPath(), [self.node1])
         self.traveler.travelTo(self.node2)
-        self.assertEqual(self.traveler.getTravelPath(), [self.node1, self.node2])
+        self.assertEqual(self.traveler.getTravelPath(),
+                         [self.node1, self.node2])
         self.traveler.travelTo(self.node3)
-        self.assertEqual(self.traveler.getTravelPath(), [self.node1, self.node2, self.node3])
+        self.assertEqual(self.traveler.getTravelPath(), [
+                         self.node1, self.node2, self.node3])

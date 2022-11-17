@@ -8,6 +8,7 @@ from src.graph.graph import Graph
 # the traveler will travel from one node to another on a network using a method of travel
 # it can provide its travel path
 
+
 class Traveler:
     def __init__(self, network: Network, name: str = None, start_location: Node = None, end_location: Node = None) -> None:
         self._name = name
@@ -15,9 +16,8 @@ class Traveler:
         self._start_location = start_location
         self._end_location = end_location
         self._network = network
-        self.travel_path = [start_location]
-        self.traveled = False #flag to indicate if the traveler has finished traveling
-        
+        self.travel_path = [self.start_location]
+        self.traveled = False  # flag to indicate if the traveler has finished traveling
 
     @property
     def name(self) -> str:
@@ -47,35 +47,24 @@ class Traveler:
             raise Exception("No network has been set for the traveler")
         return self._network
 
-    @property
-    def travel_method(self):
-        if self._travel_method == None:
-            raise Exception("No travel method has been set for the traveler")
-        return self._travel_method
-
     # returns the current travel path of the traveler as a list of list of nodes
     def getTravelPath(self) -> list[Node]:
         return self.travel_path
 
     # travels to the given node returns true if the traveler has reached the end destination
     def travelTo(self, node: Node) -> list[Node]:
-        #check if the node is in the network
+        # check if the node is in the network
         if node not in self.network.getNodes():
             raise Exception("The node is not in the network")
-        #get the nodes that the traveler can travel to from the current location
-        neighbors = []
-        for edge in self.network.getEdgesFromNode(self.start_location):
-            if edge.node1 == self.start_location:
-                neighbors.append(edge.node2)
-            elif edge.node2 == self.start_location:
-                neighbors.append(edge.node1)
-        if node in neighbors:
-            self.travel_path.append(node) #add the node to the travel path
-            self._start_location = node #set the start location to the node
-            #check if the traveler has reached the end destination or if there are no more edges to travel to
-            if node == self.end_location or self.network.getEdgesFromNode(node) == []:
-                self.traveled = True
-        else:
-            raise Exception("The traveler cannot travel to the given node")
+        if node not in self.network.getNeighbors(self.start_location):
+            raise Exception(
+                "The node is not a neighbor of the last node in the travel path")
+        # get the nodes that the traveler can travel to from the current location
+        neighbors = self.network.getNeighbors(self.travel_path[-1])
+        self.travel_path.append(node)  # add the node to the travel path
+        self._start_location = node  # set the start location to the node
+        # check if the traveler has reached the end destination or if there are no more edges to travel to
+        if node == self.end_location or self.network.getEdgesFromNode(node) == []:
+            self.traveled = True
+        print(self.travel_path)
         return self.travel_path
-
