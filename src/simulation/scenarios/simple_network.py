@@ -58,8 +58,6 @@ class TravelClass(SimpleNetwork):
             self.network.getCompleteSystemCost())
         # log the system cost
         self.system_cost_log.append(self.network.getSystemCost())
-        # log the travel path
-        self.travel_path_log.append(self.last_travel_paths)
 
     def printLogs(self) -> None:
         # print out all the logs for the travelers
@@ -69,7 +67,6 @@ class TravelClass(SimpleNetwork):
             print("Complete System Cost: " +
                   str(self.complete_system_cost_log[tick]))
             print("System Cost: " + str(self.system_cost_log[tick]))
-            print("Travel Path: " + str(self.travel_path_log[tick]))
             print("")
 
     def getLogs(self) -> dict[str, list]:
@@ -77,7 +74,6 @@ class TravelClass(SimpleNetwork):
             "interaction_cost_log": self.interaction_cost_log,
             "complete_system_cost_log": self.complete_system_cost_log,
             "system_cost_log": self.system_cost_log,
-            "travel_path_log": self.travel_path_log
         }
 
 
@@ -124,9 +120,10 @@ class EveryNodeTravel(TravelClass):
 class EveryNodeTravelerScenario:
     def __init__(self, iterations=None) -> None:
         if iterations is None:
-            iterations = 3
+            iterations = 1
         self.iterations = iterations
         self.travel = EveryNodeTravel()
+        self.network = self.travel.network
 
     def run(self) -> None:
         # create an instance of the travel class

@@ -36,6 +36,7 @@ def main():
     # create a scenario
     scenario = EveryNodeTravelerScenario()
     scenario.run()
+    print(scenario.network.graph)
     print(scenario.getLogs())
 
     return 0
