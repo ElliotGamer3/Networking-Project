@@ -1,7 +1,5 @@
-import src.graph.graph as Graph
-import src.graph.edge.edge as Edge
-import src.graph.node.node as Node
 from src.network.presets.network1 import Network1
+from src.network.presets.network2 import Network2
 from src.simulation.scenarios.predictiveTravelerScenario import PredictiveTravelerScenario
 from src.simulation.scenarios.nonPredictiveTravelerScenario import NonPredictiveTravelerScenario
 
@@ -10,17 +8,27 @@ sysRL(10000)
 
 
 def main():
-    # create a scenario for basic goes to every node traveler
-    scenario = NonPredictiveTravelerScenario(Network1())
-    scenario.run()
-    print(scenario.network.graph)
-    print(scenario.getLogs())
 
-    # create a new scenario for predictive scoring
-    scenario2 = PredictiveTravelerScenario(Network1())
-    scenario2.run()
-    print(scenario2.network.graph)
-    print(scenario2.getLogs())
+    networkPresets = {
+        "network1": Network1,
+        "network2": Network2
+    }
+
+    scenarioPresets = {
+        "predictive": PredictiveTravelerScenario,
+        "nonPredictive": NonPredictiveTravelerScenario
+    }
+
+    for presetName, networkPreset in networkPresets.items():  # for each network preset
+        for scenarioName, scenarioPreset in scenarioPresets.items():  # run each scenario
+            print("===============================================")
+            print(f"Running {presetName} with {scenarioName} scenario")
+            print("===============================================")
+            network = networkPreset()  # create the network
+            # create the scenario
+            scenario = scenarioPreset(network, 100)  # 100 iterations
+            scenario.run()
+            print("===============================================")
 
     return 0
 

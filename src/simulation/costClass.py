@@ -31,7 +31,6 @@ class CostClass(GenericNetworkWithTravelers):
             print(
                 f"Complete System Cost: {str(self.complete_system_cost_log[tick])}"
             )
-
             print(f"System Cost: {str(self.system_cost_log[tick])}")
             print("")
 

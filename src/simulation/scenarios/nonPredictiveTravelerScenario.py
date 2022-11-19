@@ -6,10 +6,14 @@ from src.simulation.costClass import NonPredictiveScenario
 
 
 class NonPredictiveTravelerScenario:
-    def __init__(self, presetNetwork) -> None:
+    def __init__(self, presetNetwork, iterations: int = None) -> None:
         self.network = presetNetwork.network
         self.travelers = presetNetwork.travelers
-        self.scenario = NonPredictiveScenario(self.network, self.travelers, 3)
+        self.iterations = iterations
+        if iterations is None:
+            self.iterations = 1
+        self.scenario = NonPredictiveScenario(
+            self.network, self.travelers, self.iterations)
 
     def run(self):
         self.scenario.run()
