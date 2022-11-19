@@ -10,7 +10,7 @@ from src.graph.graph import Graph
 # it can provide its travel path
 
 
-class Traveler:
+class NonTraveler:
     def __init__(self, network: Network, travelPath: list[Node] = None, name: str = None) -> None:
 
         self._guid = str(uuid4())  # Generate a random guid
@@ -99,17 +99,7 @@ class Traveler:
             return
         self.travelTo(self.next_location)
 
-    # looks at the possible paths and assigns a score to each one
-    # the last location the traveler was at is given the lowest score
-    # the next location is given the highest score
-    # and the locations adjacent to the next location are given the next highest scores
-    # in a true application of the algorithm, the scores would be based on
-    # factors such as the speed of the traveler the direction of the traveler and other factors that can be determined using passive RF tracking data
-    # however for simplicity, the scores are as follows:
-    # last location: 0.02
-    # other locations: 0.14
-    # next location: 0.70
-    # updates the edges in the network to reflect the traveler's path
+    # this is a non-traveler so it does not have a travel method meaning all scores are 1
 
     def updateScores(self) -> None:
         # from the current location, get the neighbors
@@ -121,20 +111,17 @@ class Traveler:
                 # get the edge between the current location and the next location
                 edge = self.network.getEdgeByNodes(
                     self.current_location, next_location)
-                # set the edge score to 0.7
-                addToScore = 0.7
+                addToScore = 1
             elif neighbor == self.last_location:
                 # get the edge between the current location and the last location
                 edge = self.network.getEdgeByNodes(
                     self.current_location, self.last_location)
-                # set the edge score to 0.02
-                addToScore = 0.02
+                addToScore = 1
             else:
                 # get the edge between the current location and the neighbor
                 edge = self.network.getEdgeByNodes(
                     self.current_location, neighbor)
-                # set the edge score to 0.14
-                addToScore = 0.14
+                addToScore = 1
             currentEdgeCost = self.network.getEdgeCost(
                 edge)  # get the current cost of the edge
             newEdgeCost = currentEdgeCost + addToScore  # add the score to the current cost
