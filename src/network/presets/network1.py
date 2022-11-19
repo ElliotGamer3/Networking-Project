@@ -11,9 +11,9 @@ class Network1:
         node2 = Node("node2", 0.0)
         node3 = Node("node3", 0.0)
         # create some edges
-        edge1 = Edge(node1, node2, 0, "edge1")
-        edge2 = Edge(node2, node3, 0, "edge2")
-        edge3 = Edge(node3, node1, 0, "edge3")
+        edge1 = Edge(node1, node2, 0.0, "edge1")
+        edge2 = Edge(node2, node3, 0.0, "edge2")
+        edge3 = Edge(node3, node1, 0.0, "edge3")
         # add the edges to a list
         edges = [edge1, edge2, edge3]
         # add the nodes to a list

@@ -81,7 +81,7 @@ class Traveler:
         if self.next_location == None:
             self.traveled = True
             return
-        if self.current_location == self.end_location:
+        if self.current_location == self.end_location and self.next_location == None or self.travelPath == []:
             self.traveled = True
             self._next_location = None
             return
