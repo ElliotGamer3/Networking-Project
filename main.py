@@ -11,7 +11,8 @@ def main():
 
     networkPresets = {
         "network1": Network1,
-        "network2": Network2
+        "network2": Network2,
+
     }
 
     scenarioPresets = {
@@ -26,7 +27,7 @@ def main():
             print("===============================================")
             network = networkPreset()  # create the network
             # create the scenario
-            scenario = scenarioPreset(network, 100)  # 100 iterations
+            scenario = scenarioPreset(network, 5)  # 5 iterations
             scenario.run()
             print("===============================================")
 

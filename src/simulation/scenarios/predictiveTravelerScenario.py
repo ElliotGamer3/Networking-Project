@@ -2,7 +2,7 @@ from src.graph.graph import Graph
 from src.network.network import Network
 from src.graph.node.node import Node
 from src.graph.edge.edge import Edge
-from src.simulation.costClass import PredictiveScenario
+from src.simulation.scenarioTypes.predictiveScenario import PredictiveScenario
 
 
 class PredictiveTravelerScenario:
