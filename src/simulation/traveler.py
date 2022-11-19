@@ -16,7 +16,8 @@ class Traveler:
         self._guid = str(uuid4())  # Generate a random guid
         self._name = name
         self._network = network
-        if travelPath is None:
+        self._travelPath = travelPath
+        if self._travelPath is None:
             self._travelPath = [self._network.getNodes()[0]]
         self._start_location = self._travelPath[0]
         self._end_location = self._travelPath[-1]
