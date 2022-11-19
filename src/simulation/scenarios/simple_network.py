@@ -4,25 +4,21 @@ from src.graph.edge.edge import Edge
 from src.graph.graphable.graphable import Graphable
 from src.network.network import Network
 from src.simulation.traveler import Traveler
+from src.simulation.genericNetwork import GenericNetwork
 
 # this class represents a simple network with 3 nodes and 2 edges
 # the goal of the network is to travel from node1 to node3
 
 
-class GenericNetwork:
-    def __init__(self, network) -> None:
-        self.network = network
-
-
 class SimpleNetwork(GenericNetwork):
     def __init__(self) -> None:
         # create the nodes
-        self.node1 = Node("node1", 0.0)
-        self.node2 = Node("node2", 0.0)
-        self.node3 = Node("node3", 0.0)
+        self.node1 = Node("node1", 1.0)
+        self.node2 = Node("node2", 1.0)
+        self.node3 = Node("node3", 1.0)
         # create the edge between the nodes with a cost of 1
-        self.edge1 = Edge(self.node1, self.node2, 1, "edge1", 1.0)
-        self.edge2 = Edge(self.node2, self.node3, 1, "edge2", 2.0)
+        self.edge1 = Edge(self.node1, self.node2, 0, "edge1", 0.0)
+        self.edge2 = Edge(self.node2, self.node3, 0, "edge2", 0.0)
         # save the network name
         self.name = "simple_network"
         # create the network with the nodes and edges
@@ -30,7 +26,7 @@ class SimpleNetwork(GenericNetwork):
             [self.node1, self.node2, self.node3, self.edge1, self.edge2])
 
 
-class TravelClass(SimpleNetwork):
+class CostClass(SimpleNetwork):
     def __init__(self, start_location=None, end_location=None) -> None:
         # if the network is not given, create a new one
         super().__init__()
@@ -78,7 +74,7 @@ class TravelClass(SimpleNetwork):
 
 
 # travel class that travels to all nodes in the network
-class EveryNodeTravel(TravelClass):
+class EveryNodeCost(CostClass):
 
     def __init__(self, start_location=None, end_location=None) -> None:
         super().__init__(start_location, end_location)
@@ -95,14 +91,14 @@ class EveryNodeTravel(TravelClass):
                 return []
 
         traveler_paths = []
-        new_travelers = [EveryNodeTravel(self.node1, self.node2)]
+        new_travelers = [EveryNodeCost(self.node1, self.node2)]
         # perform a tick for each traveler and save their travel path
         for traveler in self.travelers:
             self.travelers.remove(traveler)
             if traveler.traveled:
                 continue
             for neighbor in self.network.getNeighbors(traveler.start_location):
-                subTraveler = EveryNodeTravel(
+                subTraveler = EveryNodeCost(
                     neighbor, traveler.end_location)
                 new_travelers.append(subTraveler)
             for subTraveler in new_travelers:
@@ -122,7 +118,7 @@ class EveryNodeTravelerScenario:
         if iterations is None:
             iterations = 1
         self.iterations = iterations
-        self.travel = EveryNodeTravel()
+        self.travel = EveryNodeCost()
         self.network = self.travel.network
 
     def run(self) -> None:

@@ -26,12 +26,11 @@ def main():
     # create a graph with the nodes and no edges
     graph2 = Graph.Graph(nodes)
     # create a graph with no nodes and no edges
-    graph3 = Graph.Graph([])
+    graph3 = Graph.Graph(nodes+edges)
     print(graph1)
     print(graph2)
     print(graph3)
     print("finished basic graph tests")
-    print("")
 
     # create a scenario
     scenario = EveryNodeTravelerScenario()
