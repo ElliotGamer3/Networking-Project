@@ -1,7 +1,6 @@
 from src.network.presets.network1 import Network1
 from src.network.presets.network2 import Network2
 from src.network.presets.network3 import Network3
-import src.network.presets as presets
 from src.simulation.scenarios.predictiveTravelerScenario import PredictiveTravelerScenario
 from src.simulation.scenarios.nonPredictiveTravelerScenario import NonPredictiveTravelerScenario
 
@@ -30,7 +29,8 @@ def main():
             print("===============================================")
             network = networkPreset()  # create the network
             # create the scenario
-            scenario = scenarioPreset(network, 100)  # 100 iterations
+            # Default iterations is equal to the longest traveler's path
+            scenario = scenarioPreset(network)
             scenario.run()
             print("===============================================")
 

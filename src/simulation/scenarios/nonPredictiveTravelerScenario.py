@@ -11,7 +11,9 @@ class NonPredictiveTravelerScenario:
         self.travelers = presetNetwork.travelers
         self.iterations = iterations
         if iterations is None:
-            self.iterations = 1
+            # set iterations to the longest traveler path
+            self.iterations = max([len(traveler)
+                                  for traveler in self.travelers])
         self.scenario = NonPredictiveScenario(
             self.network, self.travelers, self.iterations)
 
